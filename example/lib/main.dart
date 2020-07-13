@@ -23,14 +23,12 @@ class _MyAppState extends State<MyApp> {
     getCurrentSoundMode();
   }
 
-  // Platform messages are asynchronous, so we initialize in an async method.
   Future<void> getCurrentSoundMode() async {
-    String platformVersion;
-    // Platform messages may fail, so we use a try/catch PlatformException.
+    String ringerStatus;
     try {
-      platformVersion = await SoundMode.ringerModeStatus;
+      ringerStatus = await SoundMode.ringerModeStatus;
     } on PlatformException {
-      platformVersion = 'Failed to get platform version.';
+      ringerStatus = 'Failed to get device\'s ringer status.';
     }
 
     // If the widget was removed from the tree while the asynchronous platform
@@ -39,7 +37,7 @@ class _MyAppState extends State<MyApp> {
     if (!mounted) return;
 
     setState(() {
-      _soundMode = platformVersion;
+      _soundMode = ringerStatus;
     });
   }
 
@@ -97,7 +95,6 @@ class _MyAppState extends State<MyApp> {
 
     try {
       message = await SoundMode.setSoundMode(Profiles.NORMAL);
-
       setState(() {
         _soundMode = message;
       });

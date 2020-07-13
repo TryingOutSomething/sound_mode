@@ -11,11 +11,9 @@ import com.tryingoutsomething.soundmode.sound_mode.services.IntentManagerService
 public class IntentManagerServiceImpl implements IntentManagerService {
 
     NotificationManager notificationManager;
-    Context context;
 
-    public IntentManagerServiceImpl(Context ctx) {
-        this.notificationManager = (NotificationManager) ctx.getSystemService(Context.NOTIFICATION_SERVICE);
-        this.context = ctx;
+    public IntentManagerServiceImpl(NotificationManager nm) {
+        this.notificationManager = nm;
     }
 
     private boolean apiIsAboveMarshmallow() {
@@ -28,7 +26,7 @@ public class IntentManagerServiceImpl implements IntentManagerService {
     }
 
     @Override
-    public void launchSettings() {
+    public void launchSettings(Context context) {
         Intent intent = new Intent(Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 

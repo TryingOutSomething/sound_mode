@@ -1,9 +1,6 @@
 package com.tryingoutsomething.soundmode.sound_mode.services.impl;
 
-import android.content.Context;
 import android.media.AudioManager;
-
-import androidx.annotation.Nullable;
 
 import com.tryingoutsomething.soundmode.sound_mode.services.AudioManagerService;
 
@@ -18,8 +15,8 @@ public class AudioManagerServiceImpl implements AudioManagerService {
 
     private final AudioManager audioManager;
 
-    public AudioManagerServiceImpl(Context context) {
-        this.audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+    public AudioManagerServiceImpl(AudioManager am) {
+        this.audioManager = am;
     }
 
     @Override

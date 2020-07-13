@@ -1,4 +1,4 @@
-package com.tryingoutsomething.soundmode.sound_mode.Utils;
+package com.tryingoutsomething.soundmode.sound_mode.utils;
 
 public class ErrorUtil {
 

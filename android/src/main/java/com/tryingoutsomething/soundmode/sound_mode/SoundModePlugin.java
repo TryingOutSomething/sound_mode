@@ -1,11 +1,12 @@
 package com.tryingoutsomething.soundmode.sound_mode;
 
+import android.app.NotificationManager;
 import android.content.Context;
 import android.media.AudioManager;
 
 import androidx.annotation.NonNull;
 
-import com.tryingoutsomething.soundmode.sound_mode.Utils.ErrorUtil;
+import com.tryingoutsomething.soundmode.sound_mode.utils.ErrorUtil;
 import com.tryingoutsomething.soundmode.sound_mode.services.impl.AudioManagerServiceImpl;
 import com.tryingoutsomething.soundmode.sound_mode.services.impl.IntentManagerServiceImpl;
 
@@ -15,6 +16,8 @@ import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
 import io.flutter.plugin.common.MethodChannel.Result;
 import io.flutter.plugin.common.PluginRegistry.Registrar;
+
+import static android.content.Context.NOTIFICATION_SERVICE;
 
 /**
  * SoundModePlugin
@@ -27,21 +30,17 @@ public class SoundModePlugin implements FlutterPlugin, MethodCallHandler {
     private MethodChannel channel;
     private AudioManagerServiceImpl audioManagerService;
     private IntentManagerServiceImpl intentManagerService;
-
-    //    private static AudioManager audioManager;
-//    private static NotificationManager notificationManager;
-//    private Context context;
-
-    public SoundModePlugin() {
-        audioManagerService = new AudioManagerServiceImpl(null);
-    }
+    private Context context;
 
     @Override
     public void onAttachedToEngine(@NonNull FlutterPluginBinding flutterPluginBinding) {
-        Context context = flutterPluginBinding.getApplicationContext();
+        context = flutterPluginBinding.getApplicationContext();
 
-        audioManagerService = new AudioManagerServiceImpl(context);
-        intentManagerService = new IntentManagerServiceImpl(context);
+        AudioManager audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+        audioManagerService = new AudioManagerServiceImpl(audioManager);
+
+        NotificationManager notificationManager = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
+        intentManagerService = new IntentManagerServiceImpl(notificationManager);
 
         channel = new MethodChannel(flutterPluginBinding.getFlutterEngine().getDartExecutor(), "method.channel.audio");
         channel.setMethodCallHandler(this);
@@ -77,7 +76,7 @@ public class SoundModePlugin implements FlutterPlugin, MethodCallHandler {
                 setPhoneToNormalMode(result);
                 break;
             case "openToDoNotDisturbSettings":
-                intentManagerService.launchSettings();
+                intentManagerService.launchSettings(context);
                 break;
             default:
                 result.notImplemented();
@@ -101,14 +100,6 @@ public class SoundModePlugin implements FlutterPlugin, MethodCallHandler {
             result.success(ringerMode);
         }
     }
-
-//    private boolean apiIsAboveMarshmallow() {
-//        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.M;
-//    }
-//
-//    private boolean permissionsAreNotEnabled() {
-//        return apiIsAboveMarshmallow() && !notificationManager.isNotificationPolicyAccessGranted();
-//    }
 
     private void setPhoneToSilentMode(MethodChannel.Result result) {
         if (intentManagerService.permissionsNotGranted()) {
@@ -141,7 +132,7 @@ public class SoundModePlugin implements FlutterPlugin, MethodCallHandler {
                     ErrorUtil.INVALID_PERMISSIONS.errorDetails
             );
         } else {
-            String currentMode = audioManagerService.setRingerMode(AudioManager.RINGER_MODE_SILENT);
+            String currentMode = audioManagerService.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
             result.success(currentMode);
         }
     }
