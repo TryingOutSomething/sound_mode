@@ -1,20 +1,20 @@
 package com.tryingoutsomething.soundmode.sound_mode;
 
-import android.app.NotificationManager;
 import android.content.Context;
-import android.content.Intent;
 import android.media.AudioManager;
-import android.os.Build;
-import android.provider.Settings;
+
 import androidx.annotation.NonNull;
+
+import com.tryingoutsomething.soundmode.sound_mode.Utils.ErrorUtil;
+import com.tryingoutsomething.soundmode.sound_mode.services.impl.AudioManagerServiceImpl;
+import com.tryingoutsomething.soundmode.sound_mode.services.impl.IntentManagerServiceImpl;
+
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
 import io.flutter.plugin.common.MethodChannel.Result;
 import io.flutter.plugin.common.PluginRegistry.Registrar;
-
-import static android.content.Context.NOTIFICATION_SERVICE;
 
 /**
  * SoundModePlugin
@@ -25,19 +25,23 @@ public class SoundModePlugin implements FlutterPlugin, MethodCallHandler {
     /// This local reference serves to register the plugin with the Flutter Engine and unregister it
     /// when the Flutter Engine is detached from the Activity
     private MethodChannel channel;
-    private static AudioManager audioManager;
-    private static NotificationManager notificationManager;
-    private static Context context;
+    private AudioManagerServiceImpl audioManagerService;
+    private IntentManagerServiceImpl intentManagerService;
 
-    private final String NORMAL_MODE_PROFILE = "Normal Mode";
-    private final String VIBRATE_MODE_PROFILE = "Vibrate Mode";
-    private final String SILENT_MODE_PROFILE = "Silent Mode";
+    //    private static AudioManager audioManager;
+//    private static NotificationManager notificationManager;
+//    private Context context;
+
+    public SoundModePlugin() {
+        audioManagerService = new AudioManagerServiceImpl(null);
+    }
 
     @Override
     public void onAttachedToEngine(@NonNull FlutterPluginBinding flutterPluginBinding) {
-        context = flutterPluginBinding.getApplicationContext();
-        audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
-        notificationManager = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
+        Context context = flutterPluginBinding.getApplicationContext();
+
+        audioManagerService = new AudioManagerServiceImpl(context);
+        intentManagerService = new IntentManagerServiceImpl(context);
 
         channel = new MethodChannel(flutterPluginBinding.getFlutterEngine().getDartExecutor(), "method.channel.audio");
         channel.setMethodCallHandler(this);
@@ -61,19 +65,19 @@ public class SoundModePlugin implements FlutterPlugin, MethodCallHandler {
     public void onMethodCall(@NonNull MethodCall call, @NonNull Result result) {
         switch (call.method) {
             case "getRingerMode":
-                getCurrentRingerMode(result, audioManager);
+                getCurrentRingerMode(result);
                 break;
             case "setSilentMode":
-                setPhoneToSilentMode(result, audioManager);
+                setPhoneToSilentMode(result);
                 break;
             case "setVibrateMode":
-                setPhoneToVibrateMode(result, audioManager);
+                setPhoneToVibrateMode(result);
                 break;
             case "setNormalMode":
-                setPhoneToNormalMode(result, audioManager);
+                setPhoneToNormalMode(result);
                 break;
             case "openToDoNotDisturbSettings":
-                openDoNoAccessSettings();
+                intentManagerService.launchSettings();
                 break;
             default:
                 result.notImplemented();
@@ -85,65 +89,66 @@ public class SoundModePlugin implements FlutterPlugin, MethodCallHandler {
         channel.setMethodCallHandler(null);
     }
 
-    private void getCurrentRingerMode(MethodChannel.Result result, AudioManager am) {
-        int ringerMode = am.getRingerMode();
+    private void getCurrentRingerMode(MethodChannel.Result result) {
+        String ringerMode = audioManagerService.getCurrentRingerMode();
 
-        switch (ringerMode) {
-            case AudioManager.RINGER_MODE_NORMAL:
-                result.success(NORMAL_MODE_PROFILE);
-                break;
-            case AudioManager.RINGER_MODE_SILENT:
-                result.success(SILENT_MODE_PROFILE);
-                break;
-            case AudioManager.RINGER_MODE_VIBRATE:
-                result.success(VIBRATE_MODE_PROFILE);
-                break;
-            default:
-                result.error("UNAVAILABLE",
-                        "Unable to get ringer mode for the current device",
-                        null
-                );
-        }
-    }
-
-    private boolean apiIsAboveMarshmallow() {
-        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.M;
-    }
-
-    private boolean permissionsAreNotEnabled() {
-        return apiIsAboveMarshmallow() && !notificationManager.isNotificationPolicyAccessGranted();
-    }
-
-    private void setPhoneToSilentMode(MethodChannel.Result result, AudioManager audioManager) {
-        if (permissionsAreNotEnabled()) {
-            result.error("NOT ALLOWED", "Do not disturb permissions not enabled for current device!", null);
+        if (ringerMode == null) {
+            result.error(ErrorUtil.SERVICE_UNAVAILABLE.errorCode,
+                    ErrorUtil.SERVICE_UNAVAILABLE.errorMessage,
+                    ErrorUtil.SERVICE_UNAVAILABLE.errorDetails
+            );
         } else {
-            audioManager.setRingerMode(AudioManager.RINGER_MODE_SILENT);
-            result.success(SILENT_MODE_PROFILE);
+            result.success(ringerMode);
         }
     }
 
-    private void setPhoneToVibrateMode(MethodChannel.Result result, AudioManager audioManager) {
-        if (permissionsAreNotEnabled()) {
-            result.error("NOT ALLOWED", "Do not disturb permissions not enabled for current device!", null);
+//    private boolean apiIsAboveMarshmallow() {
+//        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.M;
+//    }
+//
+//    private boolean permissionsAreNotEnabled() {
+//        return apiIsAboveMarshmallow() && !notificationManager.isNotificationPolicyAccessGranted();
+//    }
+
+    private void setPhoneToSilentMode(MethodChannel.Result result) {
+        if (intentManagerService.permissionsNotGranted()) {
+            result.error(ErrorUtil.INVALID_PERMISSIONS.errorCode,
+                    ErrorUtil.INVALID_PERMISSIONS.errorMessage,
+                    ErrorUtil.INVALID_PERMISSIONS.errorDetails
+            );
         } else {
-            audioManager.setRingerMode(AudioManager.RINGER_MODE_VIBRATE);
-            result.success(VIBRATE_MODE_PROFILE);
+            String currentMode = audioManagerService.setRingerMode(AudioManager.RINGER_MODE_SILENT);
+            result.success(currentMode);
         }
     }
 
-    private void setPhoneToNormalMode(MethodChannel.Result result, AudioManager audioManager) {
-        if (permissionsAreNotEnabled()) {
-            result.error("NOT ALLOWED", "Do not disturb permissions not enabled for current device!", null);
+    private void setPhoneToVibrateMode(MethodChannel.Result result) {
+        if (intentManagerService.permissionsNotGranted()) {
+            result.error(ErrorUtil.INVALID_PERMISSIONS.errorCode,
+                    ErrorUtil.INVALID_PERMISSIONS.errorMessage,
+                    ErrorUtil.INVALID_PERMISSIONS.errorDetails
+            );
         } else {
-            audioManager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
-            result.success(NORMAL_MODE_PROFILE);
+            String currentMode = audioManagerService.setRingerMode(AudioManager.RINGER_MODE_VIBRATE);
+            result.success(currentMode);
         }
     }
 
-    private void openDoNoAccessSettings() {
-        Intent intent = new Intent(Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        context.startActivity(intent);
+    private void setPhoneToNormalMode(MethodChannel.Result result) {
+        if (intentManagerService.permissionsNotGranted()) {
+            result.error(ErrorUtil.INVALID_PERMISSIONS.errorCode,
+                    ErrorUtil.INVALID_PERMISSIONS.errorMessage,
+                    ErrorUtil.INVALID_PERMISSIONS.errorDetails
+            );
+        } else {
+            String currentMode = audioManagerService.setRingerMode(AudioManager.RINGER_MODE_SILENT);
+            result.success(currentMode);
+        }
     }
+
+//    private void openDoNoAccessSettings() {
+//        Intent intent = new Intent(Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS);
+//        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//        context.startActivity(intent);
+//    }
 }
