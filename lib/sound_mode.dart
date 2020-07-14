@@ -1,11 +1,10 @@
 import 'dart:async';
 
 import 'package:flutter/services.dart';
-import 'package:sound_mode/enums/sound_profiles.dart';
+import 'package:sound_mode/utils/constants.dart';
+import 'package:sound_mode/utils/sound_profiles.dart';
 
 class SoundMode {
-  static const String _CHANNEL = "method.channel.audio";
-
   static const String _GET_RINGER_MODE_FUNCTION_NAME = "getRingerMode";
   static const String _SET_NORMAL_MODE_FUNCTION_NAME = "setNormalMode";
   static const String _SET_SILENT_MODE_FUNCTION_NAME = "setSilentMode";
@@ -14,7 +13,8 @@ class SoundMode {
   static const String _OPEN_DO_NOT_DISTURB_SETTING_FUNCTION_NAME =
       "openToDoNotDisturbSettings";
 
-  static const MethodChannel _channel = const MethodChannel(_CHANNEL);
+  static const MethodChannel _channel =
+      const MethodChannel(Constants.METHOD_CHANNEL_NAME);
 
   static String _currentRingerStatus;
 
@@ -46,7 +46,7 @@ class SoundMode {
     return _currentRingerStatus;
   }
 
-  static Future<void> openDoNotDisturbSetting() async {
-    await _channel.invokeMethod(_OPEN_DO_NOT_DISTURB_SETTING_FUNCTION_NAME);
-  }
+//  static Future<void> openDoNotDisturbSetting() async {
+//    await _channel.invokeMethod(_OPEN_DO_NOT_DISTURB_SETTING_FUNCTION_NAME);
+//  }
 }

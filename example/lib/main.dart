@@ -2,8 +2,9 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:sound_mode/enums/sound_profiles.dart';
+import 'package:sound_mode/permission_handler.dart';
 import 'package:sound_mode/sound_mode.dart';
+import 'package:sound_mode/utils/sound_profiles.dart';
 
 void main() {
   runApp(MyApp());
@@ -16,18 +17,21 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   String _soundMode = 'Unknown';
+  String _permissionStatus;
 
   @override
   void initState() {
     super.initState();
     getCurrentSoundMode();
+    getPermissionStatus();
   }
 
   Future<void> getCurrentSoundMode() async {
     String ringerStatus;
     try {
       ringerStatus = await SoundMode.ringerModeStatus;
-    } on PlatformException {
+    } catch (err) {
+      print(err);
       ringerStatus = 'Failed to get device\'s ringer status.';
     }
 
@@ -38,6 +42,21 @@ class _MyAppState extends State<MyApp> {
 
     setState(() {
       _soundMode = ringerStatus;
+    });
+  }
+
+  Future<void> getPermissionStatus() async {
+    bool permissionStatus = false;
+    try {
+      permissionStatus = await PermissionHandler.permissionsGranted;
+      print(permissionStatus);
+    } catch (err) {
+      print(err);
+    }
+
+    setState(() {
+      _permissionStatus =
+          permissionStatus ? "Permissions Enabled" : "Permissions not granted";
     });
   }
 
@@ -52,7 +71,7 @@ class _MyAppState extends State<MyApp> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Text('Running on: $_soundMode\n'),
+              Text('Running on: $_soundMode\n $_permissionStatus'),
               RaisedButton(
                 onPressed: () => setNormalMode(),
                 child: Text('Set Normal mode'),
@@ -85,8 +104,8 @@ class _MyAppState extends State<MyApp> {
       setState(() {
         _soundMode = message;
       });
-    } catch (err) {
-      print(err);
+    } on PlatformException {
+      print('Do Not Disturb access permissions required!');
     }
   }
 
@@ -98,8 +117,8 @@ class _MyAppState extends State<MyApp> {
       setState(() {
         _soundMode = message;
       });
-    } catch (err) {
-      print(err);
+    } on PlatformException {
+      print('Do Not Disturb access permissions required!');
     }
   }
 
@@ -112,12 +131,12 @@ class _MyAppState extends State<MyApp> {
       setState(() {
         _soundMode = message;
       });
-    } catch (err) {
-      print(err);
+    } on PlatformException {
+      print('Do Not Disturb access permissions required!');
     }
   }
 
   Future<void> openDoNotDisturbSettings() async {
-    await SoundMode.openDoNotDisturbSetting();
+    await PermissionHandler.openDoNotDisturbSetting();
   }
 }

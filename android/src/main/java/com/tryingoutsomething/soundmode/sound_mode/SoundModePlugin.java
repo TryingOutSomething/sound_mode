@@ -78,6 +78,9 @@ public class SoundModePlugin implements FlutterPlugin, MethodCallHandler {
             case "openToDoNotDisturbSettings":
                 intentManagerService.launchSettings(context);
                 break;
+            case "getPermissionStatus":
+                getPermissionStatus(result);
+                break;
             default:
                 result.notImplemented();
         }
@@ -102,7 +105,7 @@ public class SoundModePlugin implements FlutterPlugin, MethodCallHandler {
     }
 
     private void setPhoneToSilentMode(MethodChannel.Result result) {
-        if (intentManagerService.permissionsNotGranted()) {
+        if (!intentManagerService.permissionsGranted()) {
             result.error(ErrorUtil.INVALID_PERMISSIONS.errorCode,
                     ErrorUtil.INVALID_PERMISSIONS.errorMessage,
                     ErrorUtil.INVALID_PERMISSIONS.errorDetails
@@ -114,7 +117,7 @@ public class SoundModePlugin implements FlutterPlugin, MethodCallHandler {
     }
 
     private void setPhoneToVibrateMode(MethodChannel.Result result) {
-        if (intentManagerService.permissionsNotGranted()) {
+        if (!intentManagerService.permissionsGranted()) {
             result.error(ErrorUtil.INVALID_PERMISSIONS.errorCode,
                     ErrorUtil.INVALID_PERMISSIONS.errorMessage,
                     ErrorUtil.INVALID_PERMISSIONS.errorDetails
@@ -126,7 +129,7 @@ public class SoundModePlugin implements FlutterPlugin, MethodCallHandler {
     }
 
     private void setPhoneToNormalMode(MethodChannel.Result result) {
-        if (intentManagerService.permissionsNotGranted()) {
+        if (!intentManagerService.permissionsGranted()) {
             result.error(ErrorUtil.INVALID_PERMISSIONS.errorCode,
                     ErrorUtil.INVALID_PERMISSIONS.errorMessage,
                     ErrorUtil.INVALID_PERMISSIONS.errorDetails
@@ -137,9 +140,8 @@ public class SoundModePlugin implements FlutterPlugin, MethodCallHandler {
         }
     }
 
-//    private void openDoNoAccessSettings() {
-//        Intent intent = new Intent(Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS);
-//        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//        context.startActivity(intent);
-//    }
+    private void getPermissionStatus(MethodChannel.Result result) {
+        boolean permissionStatus = intentManagerService.permissionsGranted();
+        result.success(permissionStatus);
+    }
 }

@@ -4,6 +4,6 @@ import android.content.Context;
 
 public interface IntentManagerService {
 
-    boolean permissionsNotGranted();
+    boolean permissionsGranted();
     void launchSettings(Context context);
 }

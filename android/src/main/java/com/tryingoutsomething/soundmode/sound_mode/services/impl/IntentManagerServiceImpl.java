@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.os.Build;
 import android.provider.Settings;
 
+import androidx.annotation.RequiresApi;
+
 import com.tryingoutsomething.soundmode.sound_mode.services.IntentManagerService;
 
 public class IntentManagerServiceImpl implements IntentManagerService {
@@ -21,8 +23,12 @@ public class IntentManagerServiceImpl implements IntentManagerService {
     }
 
     @Override
-    public boolean permissionsNotGranted() {
-        return apiIsAboveMarshmallow() && !notificationManager.isNotificationPolicyAccessGranted();
+    public boolean permissionsGranted() {
+        if (apiIsAboveMarshmallow()) {
+            return notificationManager.isNotificationPolicyAccessGranted();
+        }
+
+        return true;
     }
 
     @Override
