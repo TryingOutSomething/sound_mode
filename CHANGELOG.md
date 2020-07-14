@@ -1,3 +1,9 @@
+## 0.1.4
+* Formatted sound_mode.dart file 
+
+## 0.1.3
+* Updated pubspec description
+
 ## 0.1.2
 * Added documentations to the plugin
 

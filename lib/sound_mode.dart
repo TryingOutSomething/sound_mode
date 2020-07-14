@@ -52,7 +52,7 @@ class SoundMode {
         break;
       case Profiles.VIBRATE:
         _currentRingerStatus =
-        await _channel.invokeMethod(_SET_VIBRATE_MODE_FUNCTION_NAME);
+            await _channel.invokeMethod(_SET_VIBRATE_MODE_FUNCTION_NAME);
         break;
       default:
         _currentRingerStatus = "Unknown";
