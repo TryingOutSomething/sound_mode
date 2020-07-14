@@ -1,7 +1,6 @@
 name: sound_mode
 description: A plugin to manage device's sound mode
 version: 0.0.1
-author: TryingOutSomething <jan.owyeong123@gmail.com>
 homepage: https://github.com/TryingOutSomething/sound_mode.git
 
 environment:

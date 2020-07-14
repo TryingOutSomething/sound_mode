@@ -1,8 +1,5 @@
 # sound_mode
 
-![GitHub](https://img.shields.io/github/license/TryingOutSomething/sound_mode)
-
-
 A Flutter plugin to manage a device's sound mode on Android.
 
 
