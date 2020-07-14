@@ -1,5 +1,6 @@
 name: sound_mode
-description: A plugin to manage device's sound mode
+description: A plugin to manage a device's sound mode for android. This plugin also supports requesting the required
+  permissions to modify the device's sound mode for Android API 24 and above.
 version: 0.1.2
 homepage: https://github.com/TryingOutSomething/sound_mode.git
 
