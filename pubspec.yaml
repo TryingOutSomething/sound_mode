@@ -23,5 +23,5 @@ flutter:
       android:
         package: com.tryingoutsomething.soundmode.sound_mode
         pluginClass: SoundModePlugin
-        # ios:
-        # pluginClass: SoundModePlugin
+      ios:
+        pluginClass: SoundModePlugin

@@ -30,9 +30,14 @@ class _MyAppState extends State<MyApp> {
     String ringerStatus;
     try {
       ringerStatus = await SoundMode.ringerModeStatus;
+      if (Platform.isIOS) {
+        //because i no push meesage form ios to flutter,so need read two times
+        await Future.delayed(Duration(milliseconds: 1000), () async {
+          ringerStatus = await SoundMode.ringerModeStatus;
+        });
+      }
     } catch (err) {
-      print(err);
-      ringerStatus = 'Failed to get device\'s ringer status.';
+      ringerStatus = 'Failed to get device\'s ringer status.$err';
     }
 
     // If the widget was removed from the tree while the asynchronous platform
