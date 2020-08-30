@@ -64,6 +64,18 @@ if (!isGranted) {
 }
 ``` 
 
+### For iOS version
+Currently, it is possible to get the device's ringer mode status. Thanks to [wanghaiyang5241](https://github.com/wanghaiyang5241) for adding the iOS implementation.
+
+For iOS, the following lines of code can be added to use it in flutter
+```dart
+if (Platform.isIOS) {
+    await Future.delayed(Duration(milliseconds: 1000), () async {
+        ringerStatus = await SoundMode.ringerModeStatus;
+    });
+}
+```
+
 ## Contributing
 Feel free to edit the plugin and submit a pull request or open an issue on github to leave a feedback
 
