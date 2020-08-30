@@ -1,4 +1,4 @@
-## 0.1.5
+## 0.2.0
 Added iOS implementation to get device's ringer mode  
 
 ## 0.1.4
