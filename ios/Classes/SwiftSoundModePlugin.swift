@@ -3,6 +3,7 @@ import UIKit
 import MuteDetect
 public class SwiftSoundModePlugin: NSObject, FlutterPlugin {
   var str: String = "default" 
+  var count: Int = 0
   public static func register(with registrar: FlutterPluginRegistrar) {
     let channel = FlutterMethodChannel(name: "method.channel.audio", binaryMessenger: registrar.messenger())
     let instance = SwiftSoundModePlugin()
@@ -18,6 +19,8 @@ public class SwiftSoundModePlugin: NSObject, FlutterPlugin {
                self.str+=String(self.count);
           }
           result(self.str);
+        default:
+          break;
       }
   }
 }
