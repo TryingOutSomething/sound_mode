@@ -1,3 +1,6 @@
+## 0.2.2
+Refactored return value for getting ringer status in iOS
+
 ## 0.2.1
 Added a patch for iOS implementation to fix compilation issue. Thank you [craftgear](https://github.com/craftgear) for the patch!
 

@@ -14,7 +14,7 @@ public class SwiftSoundModePlugin: NSObject, FlutterPlugin {
       switch call.method {
         case "getRingerMode":
            MuteDetect.shared.detectSound { (isMute) in
-               self.str = (isMute ? "Vibrate Mode" : "Normal Moder")
+               self.str = (isMute ? "Vibrate Mode" : "Normal Mode")
                self.count=self.count+1;
                self.str+=String(self.count);
           }
