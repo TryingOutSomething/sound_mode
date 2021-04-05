@@ -13,14 +13,14 @@ class SoundMode {
   static const MethodChannel _channel =
       const MethodChannel(Constants.METHOD_CHANNEL_NAME);
 
-  static String _currentRingerStatus;
+  static String? _currentRingerStatus;
 
   /// Gets the current device's sound mode.
   /// The return values from the function call are:
   /// 1. Normal mode
   /// 2. Silent mode
   /// 3. Vibrate mode
-  static Future<String> get ringerModeStatus async {
+  static Future<String?> get ringerModeStatus async {
     _currentRingerStatus =
         await _channel.invokeMethod(_GET_RINGER_MODE_FUNCTION_NAME);
 
@@ -40,7 +40,7 @@ class SoundMode {
   /// above. Require user's grant for Do Not Disturb Access, call the function
   /// [openDoNotDisturbSetting] from [PermissionHandler] before calling this
   /// function.
-  static Future<String> setSoundMode(Profiles profile) async {
+  static Future<String?> setSoundMode(Profiles profile) async {
     switch (profile) {
       case Profiles.NORMAL:
         _currentRingerStatus =

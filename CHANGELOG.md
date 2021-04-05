@@ -1,3 +1,6 @@
+## 1.0.0
+Null safety support.
+
 ## 0.2.2
 Refactored return value for getting ringer status in iOS
 
