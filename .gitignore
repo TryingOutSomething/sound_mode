@@ -5,5 +5,4 @@
 .pub/
 
 build/
-
-!pubspec.yaml
+.idea

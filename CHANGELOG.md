@@ -1,3 +1,6 @@
+## 1.0.2
+Removed unnecessary files not required for the plugin. I apologize for that
+
 ## 1.0.1
 Replaced RaisedButton widget in example with ElevatedButton widget as per documentation suggestion due to deprecated API.
 
