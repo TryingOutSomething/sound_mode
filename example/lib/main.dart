@@ -17,8 +17,8 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  String _soundMode = 'Unknown';
-  String _permissionStatus;
+  String? _soundMode = 'Unknown';
+  String? _permissionStatus;
 
   @override
   void initState() {
@@ -28,7 +28,7 @@ class _MyAppState extends State<MyApp> {
   }
 
   Future<void> getCurrentSoundMode() async {
-    String ringerStatus;
+    String? ringerStatus;
     try {
       ringerStatus = await SoundMode.ringerModeStatus;
       if (Platform.isIOS) {
@@ -52,9 +52,9 @@ class _MyAppState extends State<MyApp> {
   }
 
   Future<void> getPermissionStatus() async {
-    bool permissionStatus = false;
+    bool? permissionStatus = false;
     try {
-      permissionStatus = await PermissionHandler.permissionsGranted;
+      permissionStatus = await (PermissionHandler.permissionsGranted as FutureOr<bool>);
       print(permissionStatus);
     } catch (err) {
       print(err);
@@ -62,7 +62,7 @@ class _MyAppState extends State<MyApp> {
 
     setState(() {
       _permissionStatus =
-          permissionStatus ? "Permissions Enabled" : "Permissions not granted";
+          permissionStatus! ? "Permissions Enabled" : "Permissions not granted";
     });
   }
 
@@ -102,7 +102,7 @@ class _MyAppState extends State<MyApp> {
   }
 
   Future<void> setSilentMode() async {
-    String message;
+    String? message;
 
     try {
       message = await SoundMode.setSoundMode(Profiles.SILENT);
@@ -116,7 +116,7 @@ class _MyAppState extends State<MyApp> {
   }
 
   Future<void> setNormalMode() async {
-    String message;
+    String? message;
 
     try {
       message = await SoundMode.setSoundMode(Profiles.NORMAL);
@@ -129,7 +129,7 @@ class _MyAppState extends State<MyApp> {
   }
 
   Future<void> setVibrateMode() async {
-    String message;
+    String? message;
 
     try {
       message = await SoundMode.setSoundMode(Profiles.VIBRATE);

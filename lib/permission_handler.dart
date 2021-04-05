@@ -15,7 +15,7 @@ class PermissionHandler {
 
   /// Required to call this function for devices with API 24 and above.
   /// Gets the device's Do Not Disturb Access status.
-  static Future<bool> get permissionsGranted async {
+  static Future<bool?> get permissionsGranted async {
     return await _channel.invokeMethod(_GET_PERMISSION_STATUS_FUNCTION_NAME);
   }
 
