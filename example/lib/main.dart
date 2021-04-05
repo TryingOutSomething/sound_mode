@@ -54,7 +54,7 @@ class _MyAppState extends State<MyApp> {
   Future<void> getPermissionStatus() async {
     bool? permissionStatus = false;
     try {
-      permissionStatus = await (PermissionHandler.permissionsGranted as FutureOr<bool>);
+      permissionStatus = await PermissionHandler.permissionsGranted;
       print(permissionStatus);
     } catch (err) {
       print(err);
