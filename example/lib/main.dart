@@ -78,19 +78,19 @@ class _MyAppState extends State<MyApp> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Text('Running on: $_soundMode\n $_permissionStatus'),
-              RaisedButton(
+              ElevatedButton(
                 onPressed: () => setNormalMode(),
                 child: Text('Set Normal mode'),
               ),
-              RaisedButton(
+              ElevatedButton(
                 onPressed: () => setSilentMode(),
                 child: Text('Set Silent mode'),
               ),
-              RaisedButton(
+              ElevatedButton(
                 onPressed: () => setVibrateMode(),
                 child: Text('Set Vibrate mode'),
               ),
-              RaisedButton(
+              ElevatedButton(
                 onPressed: () => openDoNotDisturbSettings(),
                 child: Text('Open Do Not Access Settings'),
               ),
