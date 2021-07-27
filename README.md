@@ -1,6 +1,6 @@
 # sound_mode
 
-A Flutter plugin to manage a device's sound mode on Android.
+A [Flutter plugin](https://pub.dev/packages/sound_mode) to manage a device's sound mode on Android.
 
 
 ## Usage 
