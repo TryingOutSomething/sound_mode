@@ -1,9 +1,10 @@
 import Flutter
 import UIKit
-import MuteDetect
+import Mute
+
 public class SwiftSoundModePlugin: NSObject, FlutterPlugin {
   var str: String = "default" 
-  var count: Int = 0
+  
   public static func register(with registrar: FlutterPluginRegistrar) {
     let channel = FlutterMethodChannel(name: "method.channel.audio", binaryMessenger: registrar.messenger())
     let instance = SwiftSoundModePlugin()
@@ -13,11 +14,12 @@ public class SwiftSoundModePlugin: NSObject, FlutterPlugin {
   public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
       switch call.method {
         case "getRingerMode":
-           MuteDetect.shared.detectSound { (isMute) in
-               self.str = (isMute ? "Vibrate Mode" : "Normal Mode")
-               self.count=self.count+1;
-               self.str+=String(self.count);
-          }
+
+             Mute.shared.notify = { 
+               [weak self] m in
+               self.str = m ? "Vibrate Mode" : "Normal Mode"
+              }
+
           result(self.str);
         default:
           break;
