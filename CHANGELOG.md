@@ -1,3 +1,7 @@
+## 1.1.0
+Fixed getting ringer mode status on IOS
+Updated Readme
+
 ## 1.0.2
 Removed unnecessary files not required for the plugin. I apologize for that
 

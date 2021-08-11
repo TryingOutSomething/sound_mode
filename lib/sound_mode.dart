@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/services.dart';
 import 'package:sound_mode/utils/constants.dart';
-import 'package:sound_mode/utils/sound_profiles.dart';
+import 'package:sound_mode/utils/ringer_mode_statuses.dart';
 
 class SoundMode {
   static const String _GET_RINGER_MODE_FUNCTION_NAME = "getRingerMode";
@@ -13,16 +13,20 @@ class SoundMode {
   static const MethodChannel _channel =
       const MethodChannel(Constants.METHOD_CHANNEL_NAME);
 
-  static String? _currentRingerStatus;
+  static RingerModeStatus _currentRingerStatus = RingerModeStatus.unknown;
 
   /// Gets the current device's sound mode.
   /// The return values from the function call are:
-  /// 1. Normal mode
-  /// 2. Silent mode
-  /// 3. Vibrate mode
-  static Future<String?> get ringerModeStatus async {
-    _currentRingerStatus =
+  /// 1. Unknown mode
+  /// 2. Normal mode
+  /// 3. Silent mode
+  /// 4. Vibrate mode
+  static Future<RingerModeStatus> get ringerModeStatus async {
+    String enumValue =
         await _channel.invokeMethod(_GET_RINGER_MODE_FUNCTION_NAME);
+
+    _currentRingerStatus = RingerModeStatus.values
+        .firstWhere((e) => e.toString() == 'RingerModeStatus.' + enumValue);
 
     return _currentRingerStatus;
   }
@@ -40,22 +44,22 @@ class SoundMode {
   /// above. Require user's grant for Do Not Disturb Access, call the function
   /// [openDoNotDisturbSetting] from [PermissionHandler] before calling this
   /// function.
-  static Future<String?> setSoundMode(Profiles profile) async {
+  static Future<RingerModeStatus> setSoundMode(RingerModeStatus profile) async {
     switch (profile) {
-      case Profiles.NORMAL:
+      case RingerModeStatus.normal:
         _currentRingerStatus =
             await _channel.invokeMethod(_SET_NORMAL_MODE_FUNCTION_NAME);
         break;
-      case Profiles.SILENT:
+      case RingerModeStatus.silent:
         _currentRingerStatus =
             await _channel.invokeMethod(_SET_SILENT_MODE_FUNCTION_NAME);
         break;
-      case Profiles.VIBRATE:
+      case RingerModeStatus.vibrate:
         _currentRingerStatus =
             await _channel.invokeMethod(_SET_VIBRATE_MODE_FUNCTION_NAME);
         break;
       default:
-        _currentRingerStatus = "Unknown";
+        _currentRingerStatus = RingerModeStatus.unknown;
     }
 
     return _currentRingerStatus;

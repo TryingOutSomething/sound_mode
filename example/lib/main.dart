@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:sound_mode/permission_handler.dart';
 import 'package:sound_mode/sound_mode.dart';
-import 'package:sound_mode/utils/sound_profiles.dart';
+import 'package:sound_mode/utils/ringer_mode_statuses.dart';
 
 void main() {
   runApp(MyApp());
@@ -17,7 +17,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  String? _soundMode = 'Unknown';
+  RingerModeStatus _soundMode = RingerModeStatus.unknown;
   String? _permissionStatus;
 
   @override
@@ -28,7 +28,7 @@ class _MyAppState extends State<MyApp> {
   }
 
   Future<void> getCurrentSoundMode() async {
-    String? ringerStatus;
+    RingerModeStatus ringerStatus;
     try {
       ringerStatus = await SoundMode.ringerModeStatus;
       if (Platform.isIOS) {
@@ -38,7 +38,7 @@ class _MyAppState extends State<MyApp> {
         });
       }
     } catch (err) {
-      ringerStatus = 'Failed to get device\'s ringer status.$err';
+      ringerStatus = RingerModeStatus.unknown;
     }
 
     // If the widget was removed from the tree while the asynchronous platform
@@ -102,13 +102,13 @@ class _MyAppState extends State<MyApp> {
   }
 
   Future<void> setSilentMode() async {
-    String? message;
+    RingerModeStatus status;
 
     try {
-      message = await SoundMode.setSoundMode(Profiles.SILENT);
+      status = await SoundMode.setSoundMode(RingerModeStatus.silent);
 
       setState(() {
-        _soundMode = message;
+        _soundMode = status;
       });
     } on PlatformException {
       print('Do Not Disturb access permissions required!');
@@ -116,12 +116,12 @@ class _MyAppState extends State<MyApp> {
   }
 
   Future<void> setNormalMode() async {
-    String? message;
+    RingerModeStatus status;
 
     try {
-      message = await SoundMode.setSoundMode(Profiles.NORMAL);
+      status = await SoundMode.setSoundMode(RingerModeStatus.normal);
       setState(() {
-        _soundMode = message;
+        _soundMode = status;
       });
     } on PlatformException {
       print('Do Not Disturb access permissions required!');
@@ -129,13 +129,13 @@ class _MyAppState extends State<MyApp> {
   }
 
   Future<void> setVibrateMode() async {
-    String? message;
+    RingerModeStatus status;
 
     try {
-      message = await SoundMode.setSoundMode(Profiles.VIBRATE);
+      status = await SoundMode.setSoundMode(RingerModeStatus.vibrate);
 
       setState(() {
-        _soundMode = message;
+        _soundMode = status;
       });
     } on PlatformException {
       print('Do Not Disturb access permissions required!');
