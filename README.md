@@ -1,9 +1,8 @@
 # sound_mode
+You can get the sound mode status on IOS & Android!
+On Android you can also manage the device's sound mode.
 
-A [Flutter plugin](https://pub.dev/packages/sound_mode) to manage a device's sound mode on Android.
-
-
-## Usage 
+## Android Usage 
 Add `sound_mode` as a [dependency in your pubspec.yaml file](https://flutter.dev/docs/development/packages-and-plugins/using-packages)
 
 Add the following permission to `AndroidManifest.xml` for the app to appear in the 'Do Not Disturb Access' list
@@ -45,9 +44,9 @@ try {
 ##### List of modes available
 | Mode  | Description |
 |---|---|
-| Profiles.NORMAL  | Sets the device to normal mode  |
-| Profiles.SILENT  | Sets the device to silent mode  |
-| Profiles.VIBRATE  | Sets the device to vibrate mode  |
+| RingerModeStatus.normal  | Sets the device to normal mode  |
+| RingerModeStatus.silent  | Sets the device to silent mode  |
+| RingerModeStatus.vibrate  | Sets the device to vibrate mode  |
 
 #### For Android 6.0 and above
 For devices with Android 6.0 and above, it is required for the user to grant Do No Disturb Access to set their device's sound mode. 
@@ -64,17 +63,21 @@ if (!isGranted) {
 }
 ``` 
 
-### For iOS version
-Currently, it is possible to get the device's ringer mode status. Thanks to [wanghaiyang5241](https://github.com/wanghaiyang5241) for adding the iOS implementation.
-
+## iOS Usage
+Currently, it is possible to get the device's ringer mode status.
 For iOS, the following lines of code can be added to use it in flutter
 ```dart
-if (Platform.isIOS) {
-    await Future.delayed(Duration(milliseconds: 1000), () async {
-        ringerStatus = await SoundMode.ringerModeStatus;
-    });
-}
+ringerStatus = await SoundMode.ringerModeStatus;
 ```
+
+
+## List of ringerModeStatus statuses
+| Status  | Description |
+|---|---|
+| RingerModeStatus.unknown  | Don't know the status  |
+| RingerModeStatus.normal  | Device is in normal mode  |
+| RingerModeStatus.silent  | Device is in silent mode  |
+| RingerModeStatus.vibrate  | Device is in vibrate mode  |
 
 ## Contributing
 Feel free to edit the plugin and submit a pull request or open an issue on github to leave a feedback
