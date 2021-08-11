@@ -1,0 +1,29 @@
+PODS:
+  - Flutter (1.0.0)
+  - Mute (0.6.0)
+  - sound_mode (0.0.1):
+    - Flutter
+    - Mute (~> 0.6.0)
+
+DEPENDENCIES:
+  - Flutter (from `Flutter`)
+  - sound_mode (from `.symlinks/plugins/sound_mode/ios`)
+
+SPEC REPOS:
+  trunk:
+    - Mute
+
+EXTERNAL SOURCES:
+  Flutter:
+    :path: Flutter
+  sound_mode:
+    :path: ".symlinks/plugins/sound_mode/ios"
+
+SPEC CHECKSUMS:
+  Flutter: 434fef37c0980e73bb6479ef766c45957d4b510c
+  Mute: 66213d0aced6a074c7ab88b45ec20a9d54b1b7fb
+  sound_mode: ef0072f20e7306c1c371984a443156e39be092d5
+
+PODFILE CHECKSUM: aafe91acc616949ddb318b77800a7f51bffa2a4c
+
+COCOAPODS: 1.10.2

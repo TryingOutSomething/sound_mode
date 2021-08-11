@@ -31,20 +31,9 @@ class _MyAppState extends State<MyApp> {
     RingerModeStatus ringerStatus;
     try {
       ringerStatus = await SoundMode.ringerModeStatus;
-      if (Platform.isIOS) {
-        //because i no push meesage form ios to flutter,so need read two times
-        await Future.delayed(Duration(milliseconds: 1000), () async {
-          ringerStatus = await SoundMode.ringerModeStatus;
-        });
-      }
     } catch (err) {
       ringerStatus = RingerModeStatus.unknown;
     }
-
-    // If the widget was removed from the tree while the asynchronous platform
-    // message was in flight, we want to discard the reply rather than calling
-    // setState to update our non-existent appearance.
-    if (!mounted) return;
 
     setState(() {
       _soundMode = ringerStatus;
@@ -77,10 +66,14 @@ class _MyAppState extends State<MyApp> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Text('Running on: $_soundMode\n $_permissionStatus'),
+              Text('Running on: $_soundMode'),
+              Text('Permission status: $_permissionStatus'),
+              SizedBox(
+                height: 20,
+              ),
               ElevatedButton(
-                onPressed: () => setNormalMode(),
-                child: Text('Set Normal mode'),
+                onPressed: () => getCurrentSoundMode(),
+                child: Text('Get current sound mode'),
               ),
               ElevatedButton(
                 onPressed: () => setSilentMode(),
