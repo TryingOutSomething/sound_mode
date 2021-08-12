@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:sound_mode/permission_handler.dart';
 import 'package:sound_mode/sound_mode.dart';
-import 'package:sound_mode/utils/sound_profiles.dart';
+import 'package:sound_mode/utils/ringer_mode_statuses.dart';
 
 void main() {
   runApp(MyApp());
@@ -17,7 +17,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  String? _soundMode = 'Unknown';
+  RingerModeStatus _soundMode = RingerModeStatus.unknown;
   String? _permissionStatus;
 
   @override
@@ -28,23 +28,12 @@ class _MyAppState extends State<MyApp> {
   }
 
   Future<void> getCurrentSoundMode() async {
-    String? ringerStatus;
+    RingerModeStatus ringerStatus;
     try {
       ringerStatus = await SoundMode.ringerModeStatus;
-      if (Platform.isIOS) {
-        //because i no push meesage form ios to flutter,so need read two times
-        await Future.delayed(Duration(milliseconds: 1000), () async {
-          ringerStatus = await SoundMode.ringerModeStatus;
-        });
-      }
     } catch (err) {
-      ringerStatus = 'Failed to get device\'s ringer status.$err';
+      ringerStatus = RingerModeStatus.unknown;
     }
-
-    // If the widget was removed from the tree while the asynchronous platform
-    // message was in flight, we want to discard the reply rather than calling
-    // setState to update our non-existent appearance.
-    if (!mounted) return;
 
     setState(() {
       _soundMode = ringerStatus;
@@ -77,10 +66,14 @@ class _MyAppState extends State<MyApp> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Text('Running on: $_soundMode\n $_permissionStatus'),
+              Text('Running on: $_soundMode'),
+              Text('Permission status: $_permissionStatus'),
+              SizedBox(
+                height: 20,
+              ),
               ElevatedButton(
-                onPressed: () => setNormalMode(),
-                child: Text('Set Normal mode'),
+                onPressed: () => getCurrentSoundMode(),
+                child: Text('Get current sound mode'),
               ),
               ElevatedButton(
                 onPressed: () => setSilentMode(),
@@ -102,13 +95,13 @@ class _MyAppState extends State<MyApp> {
   }
 
   Future<void> setSilentMode() async {
-    String? message;
+    RingerModeStatus status;
 
     try {
-      message = await SoundMode.setSoundMode(Profiles.SILENT);
+      status = await SoundMode.setSoundMode(RingerModeStatus.silent);
 
       setState(() {
-        _soundMode = message;
+        _soundMode = status;
       });
     } on PlatformException {
       print('Do Not Disturb access permissions required!');
@@ -116,12 +109,12 @@ class _MyAppState extends State<MyApp> {
   }
 
   Future<void> setNormalMode() async {
-    String? message;
+    RingerModeStatus status;
 
     try {
-      message = await SoundMode.setSoundMode(Profiles.NORMAL);
+      status = await SoundMode.setSoundMode(RingerModeStatus.normal);
       setState(() {
-        _soundMode = message;
+        _soundMode = status;
       });
     } on PlatformException {
       print('Do Not Disturb access permissions required!');
@@ -129,13 +122,13 @@ class _MyAppState extends State<MyApp> {
   }
 
   Future<void> setVibrateMode() async {
-    String? message;
+    RingerModeStatus status;
 
     try {
-      message = await SoundMode.setSoundMode(Profiles.VIBRATE);
+      status = await SoundMode.setSoundMode(RingerModeStatus.vibrate);
 
       setState(() {
-        _soundMode = message;
+        _soundMode = status;
       });
     } on PlatformException {
       print('Do Not Disturb access permissions required!');

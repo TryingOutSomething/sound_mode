@@ -9,9 +9,9 @@ import com.tryingoutsomething.soundmode.sound_mode.services.AudioManagerService;
  */
 public class AudioManagerServiceImpl implements AudioManagerService {
 
-    private final String NORMAL_MODE_PROFILE = "Normal Mode";
-    private final String VIBRATE_MODE_PROFILE = "Vibrate Mode";
-    private final String SILENT_MODE_PROFILE = "Silent Mode";
+    private final String NORMAL_MODE_PROFILE = "normal";
+    private final String VIBRATE_MODE_PROFILE = "vibrate";
+    private final String SILENT_MODE_PROFILE = "silent";
 
     private final AudioManager audioManager;
 

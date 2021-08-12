@@ -1,6 +1,6 @@
-# sound_mode_example
+# example
 
-Demonstrates how to use the sound_mode plugin.
+A new Flutter project.
 
 ## Getting Started
 
