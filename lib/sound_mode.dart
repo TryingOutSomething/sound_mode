@@ -36,9 +36,9 @@ class SoundMode {
   /// Pass in either one of the following enum from [Profiles] to set the
   /// device's sound mode.
   ///
-  /// 1. Profiles.NORMAL (Sets the device to normal mode)
-  /// 2. Profiles.SILENT (Sets the device to silent mode)
-  /// 3. Profiles.VIBRATE (Sets the device to vibrate mode)
+  /// 1. RingerModeStatus.NORMAL (Sets the device to normal mode)
+  /// 2. RingerModeStatus.SILENT (Sets the device to silent mode)
+  /// 3. RingerModeStatus.VIBRATE (Sets the device to vibrate mode)
   ///
   /// Throws [PlatformException] if the current device's API version is 24 and
   /// above. Require user's grant for Do Not Disturb Access, call the function

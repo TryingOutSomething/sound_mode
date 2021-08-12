@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -74,6 +73,10 @@ class _MyAppState extends State<MyApp> {
               ElevatedButton(
                 onPressed: () => getCurrentSoundMode(),
                 child: Text('Get current sound mode'),
+              ),
+              ElevatedButton(
+                onPressed: () => setNormalMode(),
+                child: Text('Set Normal mode'),
               ),
               ElevatedButton(
                 onPressed: () => setSilentMode(),
