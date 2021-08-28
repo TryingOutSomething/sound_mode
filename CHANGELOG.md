@@ -1,3 +1,7 @@
+## 2.0.1
+
+Fixed type error when setting ringer mode
+
 ## 2.0.0
 
 - Refactored enum names and improved it's usages across both Android and IOS platforms
