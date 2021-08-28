@@ -31,11 +31,11 @@ print(ringerStatus);
 To change the device's sound mode:
 
 ```dart
-import 'package:sound_mode/utils/sound_profiles.dart';
+import 'package:sound_mode/utils/ringer_mode_statuses.dart';
 
 // Handle Platform Exceptions for devices running above Android 6.0 
 try {
-  await SoundMode.setSoundMode(Profiles.SILENT);
+  await SoundMode.setSoundMode(RingerModeStatus.silent);
 } on PlatformException {
   print('Please enable permissions required');
 }
