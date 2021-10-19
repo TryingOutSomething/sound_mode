@@ -22,24 +22,27 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    getCurrentSoundMode();
-    getPermissionStatus();
+    _getCurrentSoundMode();
+    _getPermissionStatus();
   }
 
-  Future<void> getCurrentSoundMode() async {
-    RingerModeStatus ringerStatus;
-    try {
-      ringerStatus = await SoundMode.ringerModeStatus;
-    } catch (err) {
-      ringerStatus = RingerModeStatus.unknown;
-    }
+  Future<void> _getCurrentSoundMode() async {
+    RingerModeStatus ringerStatus = RingerModeStatus.unknown;
 
-    setState(() {
-      _soundMode = ringerStatus;
+    Future.delayed(const Duration(seconds: 1), () async {
+      try {
+        ringerStatus = await SoundMode.ringerModeStatus;
+      } catch (err) {
+        ringerStatus = RingerModeStatus.unknown;
+      }
+
+      setState(() {
+        _soundMode = ringerStatus;
+      });
     });
   }
 
-  Future<void> getPermissionStatus() async {
+  Future<void> _getPermissionStatus() async {
     bool? permissionStatus = false;
     try {
       permissionStatus = await PermissionHandler.permissionsGranted;
@@ -71,23 +74,23 @@ class _MyAppState extends State<MyApp> {
                 height: 20,
               ),
               ElevatedButton(
-                onPressed: () => getCurrentSoundMode(),
+                onPressed: () => _getCurrentSoundMode(),
                 child: Text('Get current sound mode'),
               ),
               ElevatedButton(
-                onPressed: () => setNormalMode(),
+                onPressed: () => _setNormalMode(),
                 child: Text('Set Normal mode'),
               ),
               ElevatedButton(
-                onPressed: () => setSilentMode(),
+                onPressed: () => _setSilentMode(),
                 child: Text('Set Silent mode'),
               ),
               ElevatedButton(
-                onPressed: () => setVibrateMode(),
+                onPressed: () => _setVibrateMode(),
                 child: Text('Set Vibrate mode'),
               ),
               ElevatedButton(
-                onPressed: () => openDoNotDisturbSettings(),
+                onPressed: () => _openDoNotDisturbSettings(),
                 child: Text('Open Do Not Access Settings'),
               ),
             ],
@@ -97,7 +100,7 @@ class _MyAppState extends State<MyApp> {
     );
   }
 
-  Future<void> setSilentMode() async {
+  Future<void> _setSilentMode() async {
     RingerModeStatus status;
 
     try {
@@ -111,7 +114,7 @@ class _MyAppState extends State<MyApp> {
     }
   }
 
-  Future<void> setNormalMode() async {
+  Future<void> _setNormalMode() async {
     RingerModeStatus status;
 
     try {
@@ -124,7 +127,7 @@ class _MyAppState extends State<MyApp> {
     }
   }
 
-  Future<void> setVibrateMode() async {
+  Future<void> _setVibrateMode() async {
     RingerModeStatus status;
 
     try {
@@ -138,7 +141,7 @@ class _MyAppState extends State<MyApp> {
     }
   }
 
-  Future<void> openDoNotDisturbSettings() async {
+  Future<void> _openDoNotDisturbSettings() async {
     await PermissionHandler.openDoNotDisturbSetting();
   }
 }
