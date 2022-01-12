@@ -15,14 +15,17 @@ class SoundMode {
 
   static RingerModeStatus _currentRingerStatus = RingerModeStatus.unknown;
 
+  /// withoutCache re-requests data from the device
   /// Gets the current device's sound mode.
   /// The return values from the function call are:
   /// 1. Unknown mode
   /// 2. Normal mode
   /// 3. Silent mode
   /// 4. Vibrate mode
-  static Future<RingerModeStatus> get ringerModeStatus async {
-    if (_currentRingerStatus == RingerModeStatus.unknown) {
+  static Future<RingerModeStatus> ringerModeStatus({
+    bool withoutCache = false,
+  }) async {
+    if (_currentRingerStatus == RingerModeStatus.unknown || withoutCache) {
       String enumStringValue =
           await _channel.invokeMethod(_GET_RINGER_MODE_FUNCTION_NAME);
 

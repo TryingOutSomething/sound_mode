@@ -24,7 +24,7 @@ Add the following permission to `AndroidManifest.xml` for the app to appear in t
 To get the device's current sound mode:
  
 ```dart
-String ringerStatus = await SoundMode.ringerModeStatus;
+String ringerStatus = await SoundMode.ringerModeStatus();
 print(ringerStatus);
 ```
 
