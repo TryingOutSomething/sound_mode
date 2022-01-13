@@ -1,3 +1,10 @@
+## 2.0.2
+
+Fixed wrong ringer mode value returned while ringer mode is changed outside of the Flutter app.
+
+Thank you [JobMoll](https://github.com/JobMoll) for the improvements made to the plugin
+and [kirill09](https://github.com/kirill09) for helping me to understand the issue.
+
 ## 2.0.1
 
 Fixed type error when setting ringer mode
