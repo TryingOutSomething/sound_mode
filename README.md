@@ -2,6 +2,11 @@
 You can get the sound mode status on IOS & Android!
 On Android you can also manage the device's sound mode.
 
+## Features
+1. Detect device's current sound mode (both IOS & Android)
+2. Able to toggle between Normal, Silent & Vibrate mode (only Android)
+3. Grant Do No Disturb permissions for devices above platform version `Android 6.0 (API 23)` (only Android)
+
 ## Android Usage 
 Add `sound_mode` as a [dependency in your pubspec.yaml file](https://flutter.dev/docs/development/packages-and-plugins/using-packages)
 
@@ -15,12 +20,7 @@ Add the following permission to `AndroidManifest.xml` for the app to appear in t
 </manifest>
 ```
 
-## Features
-1. Detect device's current sound mode
-2. Able to toggle between Normal, Silent & Vibrate mode
-3. Grant Do No Disturb permissions for devices above platform version `Android 6.0 (API 23)` 
-
-## Example
+### Example
 To get the device's current sound mode:
  
 ```dart
@@ -41,13 +41,6 @@ try {
 }
 ```
 
-##### List of modes available
-| Mode  | Description |
-|---|---|
-| RingerModeStatus.normal  | Sets the device to normal mode  |
-| RingerModeStatus.silent  | Sets the device to silent mode  |
-| RingerModeStatus.vibrate  | Sets the device to vibrate mode  |
-
 #### For Android 6.0 and above
 For devices with Android 6.0 and above, it is required for the user to grant Do No Disturb Access to set their device's sound mode. 
 
@@ -64,14 +57,27 @@ if (!isGranted) {
 ``` 
 
 ## iOS Usage
+WARNING: This only works on real IOS devices. Not in the simulator.
+
 Currently, it is possible to get the device's ringer mode status.
-For iOS, the following lines of code can be added to use it in flutter
+For iOS, the following lines of code can be added to use it in flutter.
+
+### Example
 ```dart
-ringerStatus = await SoundMode.ringerModeStatus;
+RingerModeStatus ringerStatus = RingerModeStatus.unknown;
+
+// The one second delay is needed to get accurate results on IOS...
+Future.delayed(const Duration(seconds: 1), () async {
+  try {
+    ringerStatus = await SoundMode.ringerModeStatus;
+  } catch (err) {
+    ringerStatus = RingerModeStatus.unknown;
+  }
+  print(ringerStatus);
+});
 ```
 
-
-## List of ringerModeStatus statuses
+## List of RingerModeStatus statuses
 | Status  | Description |
 |---|---|
 | RingerModeStatus.unknown  | Don't know the status  |

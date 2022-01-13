@@ -22,12 +22,10 @@ class SoundMode {
   /// 3. Silent mode
   /// 4. Vibrate mode
   static Future<RingerModeStatus> get ringerModeStatus async {
-    if (_currentRingerStatus == RingerModeStatus.unknown) {
-      String enumStringValue =
-          await _channel.invokeMethod(_GET_RINGER_MODE_FUNCTION_NAME);
+    String enumStringValue =
+        await _channel.invokeMethod(_GET_RINGER_MODE_FUNCTION_NAME);
 
-      _currentRingerStatus = _toEnum(enumStringValue);
-    }
+    _currentRingerStatus = _toEnum(enumStringValue);
 
     return _currentRingerStatus;
   }
