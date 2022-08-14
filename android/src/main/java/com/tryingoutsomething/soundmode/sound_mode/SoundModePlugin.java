@@ -15,7 +15,7 @@ import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
 import io.flutter.plugin.common.MethodChannel.Result;
-import io.flutter.plugin.common.PluginRegistry.Registrar;
+//import io.flutter.plugin.common.PluginRegistry.Registrar;
 
 import static android.content.Context.NOTIFICATION_SERVICE;
 
@@ -42,7 +42,7 @@ public class SoundModePlugin implements FlutterPlugin, MethodCallHandler {
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
         intentManagerService = new IntentManagerServiceImpl(notificationManager);
 
-        channel = new MethodChannel(flutterPluginBinding.getFlutterEngine().getDartExecutor(), "method.channel.audio");
+        channel = new MethodChannel(flutterPluginBinding.getBinaryMessenger(), "method.channel.audio");
         channel.setMethodCallHandler(this);
     }
 
@@ -55,10 +55,10 @@ public class SoundModePlugin implements FlutterPlugin, MethodCallHandler {
     // them functionally equivalent. Only one of onAttachedToEngine or registerWith will be called
     // depending on the user's project. onAttachedToEngine or registerWith must both be defined
     // in the same class.
-    public static void registerWith(Registrar registrar) {
-        final MethodChannel channel = new MethodChannel(registrar.messenger(), "method.channel.audio");
-        channel.setMethodCallHandler(new SoundModePlugin());
-    }
+//    public static void registerWith(Registrar registrar) {
+//        final MethodChannel channel = new MethodChannel(registrar.messenger(), "method.channel.audio");
+//        channel.setMethodCallHandler(new SoundModePlugin());
+//    }
 
     @Override
     public void onMethodCall(@NonNull MethodCall call, @NonNull Result result) {

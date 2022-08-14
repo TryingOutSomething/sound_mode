@@ -1,3 +1,7 @@
+## 2.1.0
+
+Removed Android v1 bindings from the plugin.
+
 ## 2.0.2
 
 Fixed wrong ringer mode value returned while ringer mode is changed outside of the Flutter app.
