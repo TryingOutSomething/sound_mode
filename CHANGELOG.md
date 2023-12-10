@@ -1,3 +1,7 @@
+## 3.0.0
+
+Add support for Android 13.
+
 ## 2.1.0
 
 Removed Android v1 bindings from the plugin.
