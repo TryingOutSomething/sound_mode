@@ -1,10 +1,9 @@
 package com.tryingoutsomething.soundmode.sound_mode.services;
 
 /**
- * @author TryingOutSomething
+ * Interface to handle audio profile modes.
  */
 public interface AudioManagerService {
-
     String getCurrentRingerMode();
     String setRingerMode(int updatedRingerMode);
 }
