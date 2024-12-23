@@ -1,1 +1,1 @@
-enum RingerModeStatus { unknown, normal, silent, vibrate }
+enum RingerModeStatus { unknown, normal, silent, vibrate, dnd }
