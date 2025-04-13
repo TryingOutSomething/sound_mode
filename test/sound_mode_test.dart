@@ -4,16 +4,15 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   const MethodChannel channel = MethodChannel('sound_mode');
 
-  TestWidgetsFlutterBinding.ensureInitialized();
-
-  setUp(() {
-    channel.setMockMethodCallHandler((MethodCall methodCall) async {
-      return '42';
+  setUp(() async {
+    TestWidgetsFlutterBinding.ensureInitialized();
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockMethodCallHandler(channel, (call) async {
+      return null;
     });
   });
 
   tearDown(() {
-    channel.setMockMethodCallHandler(null);
+    channel.setMethodCallHandler(null);
   });
 
 //  test('getPlatformVersion', () async {
