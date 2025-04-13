@@ -1,92 +1,153 @@
 # sound_mode
-You can get the sound mode status on IOS & Android!
-On Android you can also manage the device's sound mode.
+
+A Flutter plugin for detecting and controlling the ringer mode (Normal, Silent, Vibrate) on Android devices.  
+Also supports detecting ringer mode status on iOS (read-only).
+
+---
 
 ## Features
-1. Detect device's current sound mode (both IOS & Android)
-2. Able to toggle between Normal, Silent & Vibrate mode (only Android)
-3. Grant Do No Disturb permissions for devices above platform version `Android 6.0 (API 23)` (only Android)
 
-## Android Usage 
-Add `sound_mode` as a [dependency in your pubspec.yaml file](https://flutter.dev/docs/development/packages-and-plugins/using-packages)
+- Detect the current ringer mode on Android and iOS
+- Toggle between **Normal**, **Silent**, and **Vibrate** modes (Android only)
+- Request and manage **Do Not Disturb** permissions on Android 6.0 (API 23) and above
 
-Add the following permission to `AndroidManifest.xml` for the app to appear in the 'Do Not Disturb Access' list
+---
+
+## Installation
+
+Add `sound_mode` to your [`pubspec.yaml`](https://flutter.dev/docs/development/packages-and-plugins/using-package) file:
+
+```yaml
+dependencies:
+  sound_mode: <latest_version>
 ```
-<manifest ... >
-    <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY"/>
-    
-    <application ... >
-    ...
-</manifest>
+
+Then run:
+
+```bash
+flutter pub get
 ```
 
-### Example
-To get the device's current sound mode:
- 
+---
+
+## Android Setup
+
+### Permissions
+
+To allow the app to change ringer mode on Android 6.0+, you need to request **Do Not Disturb access**.  
+Add the following permission to your `AndroidManifest.xml`:
+
+```xml
+<uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY" />
+```
+
+Place this inside the `<manifest>` tag, not inside `<application>`.
+
+---
+
+## Usage
+
+### Get current ringer mode
+
 ```dart
+import 'package:sound_mode/sound_mode.dart';
+
 String ringerStatus = await SoundMode.ringerModeStatus;
 print(ringerStatus);
 ```
 
-To change the device's sound mode:
+### Change ringer mode (Android only)
 
 ```dart
+import 'package:sound_mode/sound_mode.dart';
 import 'package:sound_mode/utils/ringer_mode_statuses.dart';
 
-// Handle Platform Exceptions for devices running above Android 6.0 
 try {
   await SoundMode.setSoundMode(RingerModeStatus.silent);
 } on PlatformException {
-  print('Please enable permissions required');
+  print('Please enable the required permissions');
 }
 ```
 
-#### For Android 6.0 and above
-For devices with Android 6.0 and above, it is required for the user to grant Do No Disturb Access to set their device's sound mode. 
+### Handling Do Not Disturb Access (Android 6.0+)
 
-To check if the user has granted the permissions and prompt for approval
+To change the ringer mode on devices running Android 6.0 (API level 23) and above, your app must have **Do Not Disturb access** (also known as Notification Policy Access). Without this, calls to `setSoundMode()` will fail.
+
+#### 1. Add permission to AndroidManifest.xml
+
+Make sure the following permission is declared:
+
+```xml
+<uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY" />
+```
+
+#### 2. Check and request permission at runtime
+
+Use the plugin's built-in `PermissionHandler` to check if access is granted, and open the system settings page if needed:
+
 ```dart
 import 'package:sound_mode/permission_handler.dart';
 
 bool isGranted = await PermissionHandler.permissionsGranted;
 
 if (!isGranted) {
-  // Opens the Do Not Disturb Access settings to grant the access
+  // This will open the system settings where the user can manually grant access
   await PermissionHandler.openDoNotDisturbSetting();
 }
-``` 
+```
 
-## iOS Usage
-WARNING: This only works on real IOS devices. Not in the simulator.
+---
 
-Currently, it is possible to get the device's ringer mode status.
-For iOS, the following lines of code can be added to use it in flutter.
+## iOS Support
 
-### Example
+> **Warning:** iOS support is currently **experimental and unreliable**.  
+> Reading the ringer mode status may **not work consistently** across all devices and OS versions.  
+> This feature also does **not work on iOS simulators** — only real devices.
+
+We're actively looking for contributors to help improve iOS support.  
+If you have experience with iOS native development or want to help debug the current implementation, feel free to [open an issue](https://github.com/your-repo-link/issues) or submit a pull request.
+
+### Example (iOS)
+
+A short delay is recommended before reading the ringer status for more reliable results:
+
 ```dart
+import 'package:sound_mode/sound_mode.dart';
+import 'package:sound_mode/utils/ringer_mode_statuses.dart';
+
 RingerModeStatus ringerStatus = RingerModeStatus.unknown;
 
-// The one second delay is needed to get accurate results on IOS...
 Future.delayed(const Duration(seconds: 1), () async {
-  try {
-    ringerStatus = await SoundMode.ringerModeStatus;
-  } catch (err) {
-    ringerStatus = RingerModeStatus.unknown;
-  }
-  print(ringerStatus);
+try {
+ringerStatus = await SoundMode.ringerModeStatus;
+} catch (err) {
+ringerStatus = RingerModeStatus.unknown;
+}
+print(ringerStatus);
 });
 ```
 
-## List of RingerModeStatus statuses
-| Status  | Description |
-|---|---|
-| RingerModeStatus.unknown  | Don't know the status  |
-| RingerModeStatus.normal  | Device is in normal mode  |
-| RingerModeStatus.silent  | Device is in silent mode  |
-| RingerModeStatus.vibrate  | Device is in vibrate mode  |
+---
+
+## RingerModeStatus Values
+
+| Value                      | Description                      |
+|---------------------------|----------------------------------|
+| `RingerModeStatus.unknown` | Unknown or unsupported status   |
+| `RingerModeStatus.normal`  | Device is in Normal mode        |
+| `RingerModeStatus.silent`  | Device is in Silent mode        |
+| `RingerModeStatus.vibrate` | Device is in Vibrate mode       |
+
+---
 
 ## Contributing
-Feel free to edit the plugin and submit a pull request or open an issue on github to leave a feedback
+
+Contributions are welcome. Feel free to open an issue or submit a pull request on GitHub.
+
+---
 
 ## License
-[MIT](https://choosealicense.com/licenses/mit/) 
+
+This project is licensed under the [MIT License](https://choosealicense.com/licenses/mit/).
+
+---
