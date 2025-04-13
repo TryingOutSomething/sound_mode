@@ -1,5 +1,5 @@
-group 'com.tryingoutsomething.soundmode.sound_mode'
-version '1.0'
+group = 'com.tryingoutsomething.soundmode.sound_mode'
+version = '1.0'
 
 buildscript {
     repositories {
@@ -8,7 +8,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.3.1'
+        classpath 'com.android.tools.build:gradle:8.7.3'
     }
 }
 
@@ -23,15 +23,24 @@ apply plugin: 'com.android.library'
 
 android {
     namespace 'com.tryingoutsomething.soundmode.sound_mode'
+    compileSdk = 35
+
+//    compileOptions {
+//        sourceCompatibility = JavaVersion.VERSION_20
+//        targetCompatibility = JavaVersion.VERSION_11
+//    }
+
     defaultConfig {
-        compileSdk 34
-        minSdkVersion 16
+        minSdk = 16
     }
+
+    dependencies {
+        implementation 'androidx.annotation:annotation:1.9.1'
+        compileOnly files('tempLibs/flutter.jar') // enable this to allow syntax recognition
+    }
+
     lintOptions {
         disable 'InvalidPackage'
     }
 }
 
-dependencies {
-    implementation 'androidx.annotation:annotation:1.7.0'
-}
