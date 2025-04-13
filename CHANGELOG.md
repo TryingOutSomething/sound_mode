@@ -1,3 +1,9 @@
+## 3.1.0
+
+Add support for Android 14 and 15.
+
+Thank you [EphraimLangdon](https://github.com/EphraimLangdon) for adding namespace to support android gradle 8
+
 ## 3.0.0
 
 Add support for Android 13.
