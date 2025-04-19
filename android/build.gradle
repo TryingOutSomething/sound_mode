@@ -31,7 +31,7 @@ android {
 
     dependencies {
         implementation 'androidx.annotation:annotation:1.9.1'
-        compileOnly files('tempLibs/flutter.jar') // enable this to allow syntax recognition
+//        compileOnly files('tempLibs/flutter.jar') // enable this to allow syntax recognition
     }
 
     lintOptions {
