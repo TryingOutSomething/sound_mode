@@ -20,5 +20,12 @@ jobs:
     runs-on: ubuntu-latest
     environment: pub.dev
     steps:
-      - uses: dart-lang/setup-dart/.github/workflows/publish.yml@v1
+      - uses: actions/checkout@v3
+      - uses: dart-lang/setup-dart@v1
+      - uses: flutter-actions/setup-flutter@v4
+      - name: Install dependencies
+        run: dart pub get
+      - name: Publish Dry Run
+        run: dart pub publish --dry-run
+#      - uses: dart-lang/setup-dart/.github/workflows/publish.yml@v1
     #   working-directory: path/to/package/within/repository
