@@ -1,3 +1,7 @@
+## 3.1.1
+
+Fix android bug which requires development jar as a dependency in build.gradle
+
 ## 3.1.0
 
 Add support for Android 14 and 15.
