@@ -5,6 +5,16 @@ Also supports detecting ringer mode status on iOS (read-only).
 
 ---
 
+## Project Status
+
+I would like to sincerely thank everyone who has supported and contributed to this project over time. Unfortunately, I no longer have enough time to actively maintain it.
+
+Going forward, I encourage users to migrate to and support the maintained version of the plugin by [nafiskabbo](https://pub.dev/packages/sound_mode_advanced), which will continue receiving updates and improvements.
+
+This repository will remain available for a period of time, but it will eventually be archived and become read-only. Thank you again for all the support, contributions, and feedback throughout this project’s journey.
+
+---
+
 ## Features
 
 - Detect the current ringer mode on Android and iOS
